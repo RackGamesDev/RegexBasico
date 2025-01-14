@@ -1,0 +1,62 @@
+Se entiende por x un caracter u otro regex 
+Se entiende por palabra x cantidad de caracteres separadas por delimitadores como espacios
+Se entiende por linea una sucesion de caracteres separados por un salto de linea
+
+ESTANDAR:
+
+x = Esos caracteres en ese orden
+. = Cualquier caracter una vez (menos salto de linea)
+\d = Cualquier caracter digito (1 2 3 4 5 6 7 8 9 0)
+\D = Cualquier caracter no digito
+\b = Cualquier separador (salto de linea, espacio, etc...)
+\b<hola = Indica el inicio de una palabra y despues esos caracteres, \b< seria el final
+* = Cualquier asterisco en cualquier cantidad
+x+ = Ese caracter en cualquier cantidad (seguidos)
+x? = Veces que ese caracter aparece una o cero veces (porque puede ser opcional)
+x{5} = Cuando ese caracter aparezca x veces seguidas
+x{2,4} = Cuando ese caracter aparezca entre x o y veces
+x{2,} = Cuando se omite el limite maximo se da por hecho que es infinito (2 o mas)
+x{,2} = Y si se omite el primero cuenta como 0
+(abc){2} = En general los ( ) se usan para agrupar caracteres, en este caso solo seria valido abcabc
+[abc]{2} = Los [ ] representan cualquiera de los caracteres adentro, en este caso "ca" seria valido
+[x-z] = Caracteres (en orden ascii) de un caracter a otro
+?:hola|adios|nose = Acepta cualquiera de esas combinaciones de caracteres
+(a|b|c) = Similar a lo anterior, acepta cualquiera de esos caracteres
+x(?!asdf) = No acepta que aparezca x si tambien esta esa combinacion de caracteres
+x$ = Final de la linea, en este caso una linea acabada en x
+^x = Similar al anterior, el inicio de la linea
+\n = Simplemente indica un salto de linea
+\* = Escapar un caracter utilizado por regex, en este caso se tomaria * como caracter literal
+(?![-x]) = indica cualquier caracter menos x, que puede ser omitido
+#asdf = Comentario, se omite para la busqueda
+
+
+SQL:
+* se intercambia por %
+. se intercambia por _
+Los caracteres de escape \x se cambian por \\x (\d -> \\d)
+
+
+OTROS:
+Los siguientes caracteres podrían tener funcionalidad adicional en algunos casos
+~ & / < > =
+
+
+
+EJEMPLOS:
+"^[0-9A-Za-z]+$"   =   Admite solo digitos, minusculas y mayusculas
+"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"   =   Admite emails
+"^[A-Z]{1,3}\s?[0-9]{1,4}\s?[A-Z]{1,3}$"   =   Admite matriculas europeas
+"^(?:[0-9\s-]*[0-9]){9}[0-9\s-]*$"   =   Admite telefonos (sin contar los estadounidenses)
+"^\+?1?\s?(\(?\d{3}\)?[\s.-]?)?\d{3}[\s.-]?\d{4}$"   =   Admite solo numeros de telefono con formato estadounidense
+"^(?![-_])[A-Za-z0-9-_]*(?<![-_])$"   =   Admite un posible nombre de usuario (mayusculas, minusculas, numeros, _ - pero solo en la mitad)
+"^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*_.])[A-Za-z\d!@#$%^&*_.]{8,20}$"   =   Contrasegna valida segun el estandar comun (de 8 a 20 caracters; al menos una mayuscula, minuscula, digito y caracter especial (!@#$%^&*_.))
+"^(https?|ftp)://[^\s/$.?#].[^\s]*$"   =   Una url valida
+"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"   =   Una ipv4 direccion valida
+"^((?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}|((?:[A-Fa-f0-9]{1,4}:){1,7}|:):|(?:::(?:[A-Fa-f0-9]{1,4}:){0,5}[A-Fa-f0-9]{1,4})(?:%[0-9a-zA-Z]{1,})?)$"   =   Una direccion ipv6 valida
+"^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$"   =   Una direccion mac valida
+"^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-\d{2}(\d{2})?$"   =   Una fecha valida (DD-MM-YYYY o DD-MM-YY suponiendo que es de los agos 2000)
+"^([01]\d|2[0-3]):([0-5]\d):([0-5]\d)$"   =   Una hora valida (HH:MM:SS)
+"^#?([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$"   =   Un color hexadecimal valido
+"^[+-]?([0-9]*[.])?[0-9]+$"   =   Un numero float valido
+"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$" = Un uuid valido segun el estandar
